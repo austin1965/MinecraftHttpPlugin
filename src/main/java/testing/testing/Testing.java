@@ -4,14 +4,12 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import testing.testing.events.MyEvent;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -43,18 +41,13 @@ public final class Testing extends JavaPlugin implements Listener {
         @Override
         public void handle(HttpExchange t) throws IOException {
             logRequest(t);
-
-            logger.info("before");
             try {
-                //Bukkit.getServer().getWorld("world").setTime(0L);
-                //MyEvent event = new MyEvent(false);
-                //Bukkit.getPluginManager().callEvent(event);
                 messages.add("test");
+                logger.info("Added message to message queue.");
             }
             catch(Exception e) {
                 logger.info(String.valueOf(e.getMessage()));
             }
-            logger.info("after");
             String response = "{}";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
@@ -74,19 +67,6 @@ public final class Testing extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         server.stop(0);
-    }
-
-    @EventHandler
-    public void onMyEvent(MyEvent event) {
-        getServer().getWorld("world").setTime(0L);
-
-        if (event.isAsynchronous()) {
-            //getServer().getScheduler().scheduleSyncDelayedTask(this, new ChangeDay(this));
-            ChangeDay changeDay = new ChangeDay(this);
-            changeDay.runTaskLater(changeDay.getMyPlugin(), 0L);
-        }
-
-
     }
 
     public class ChangeDay extends BukkitRunnable {
