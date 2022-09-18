@@ -1,0 +1,5 @@
+name: Testing
+version: '${project.version}'
+main: testing.testing.Testing
+api-version: 1.19
+description: test
