@@ -53,6 +53,7 @@ public final class Testing extends JavaPlugin implements Listener {
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
             os.close();
+            logResponse(t);
         }
 
         private void logRequest(HttpExchange exchange) {
