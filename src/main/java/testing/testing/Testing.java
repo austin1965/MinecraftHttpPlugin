@@ -6,10 +6,12 @@ import com.sun.net.httpserver.HttpServer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginLogger;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import testing.testing.events.MyEvent;
-import testing.testing.tasks.ChangeDay;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,12 +22,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public final class Testing extends JavaPlugin implements Listener {
     PluginLogger logger = new PluginLogger(this);
     Queue<String> messages = new ConcurrentLinkedQueue<String>();
-
     private HttpServer server = null;
     @Override
     public void onEnable() {
-        //BukkitTask changeDayTask = new ChangeDay(this).runTaskTimer(this, 0L, 100L);
-
+        BukkitTask changeDayTask = new ChangeDay(this).runTaskTimer(this, 0L, 100L);
         try {
             server = HttpServer.create(new InetSocketAddress(12000), 0);
             server.createContext("/test", new MyHandler());
@@ -43,12 +43,13 @@ public final class Testing extends JavaPlugin implements Listener {
         @Override
         public void handle(HttpExchange t) throws IOException {
             logRequest(t);
-            //messages.add("test");
+
             logger.info("before");
             try {
                 //Bukkit.getServer().getWorld("world").setTime(0L);
-                MyEvent event = new MyEvent(false);
-                Bukkit.getPluginManager().callEvent(event);
+                //MyEvent event = new MyEvent(false);
+                //Bukkit.getPluginManager().callEvent(event);
+                messages.add("test");
             }
             catch(Exception e) {
                 logger.info(String.valueOf(e.getMessage()));
@@ -75,7 +76,6 @@ public final class Testing extends JavaPlugin implements Listener {
         server.stop(0);
     }
 
-
     @EventHandler
     public void onMyEvent(MyEvent event) {
         getServer().getWorld("world").setTime(0L);
@@ -89,5 +89,23 @@ public final class Testing extends JavaPlugin implements Listener {
 
     }
 
+    public class ChangeDay extends BukkitRunnable {
 
+        Plugin myPlugin;
+
+        public ChangeDay(Plugin myPlugin) {
+            this.myPlugin = myPlugin;
+        }
+
+        @Override
+        public void run() {
+            if (messages.size() > 0) {
+                Bukkit.getServer().getWorld("world").setTime(0L);
+                messages.poll();
+            }
+        }
+        public Plugin getMyPlugin() {
+            return myPlugin;
+        }
+    }
 }
