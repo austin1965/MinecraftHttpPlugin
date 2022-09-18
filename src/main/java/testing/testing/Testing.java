@@ -56,12 +56,20 @@ public final class Testing extends JavaPlugin implements Listener {
         }
 
         private void logRequest(HttpExchange exchange) {
-            logger.info("-------------BEGIN REQUEST-------------");
+            logger.info("-------------BEGIN REQUEST LOG-------------");
             logger.info("Method:" + exchange.getRequestMethod());
             logger.info("URI:\n" + exchange.getRequestURI().toString());
             logger.info("Headers:\n" + exchange.getRequestHeaders().toString());
             logger.info("Body:\n" + exchange.getRequestBody().toString());
-            logger.info("--------------END REQUEST--------------");
+            logger.info("--------------END REQUEST LOG--------------");
+        }
+
+        private void logResponse(HttpExchange exchange) {
+            logger.info("-------------BEGIN RESPONSE LOG-------------");
+            logger.info("Code:" + exchange.getResponseCode());
+            logger.info("Headers\n" + exchange.getResponseHeaders().toString());
+            logger.info("Body:\n" + exchange.getResponseBody().toString());
+            logger.info("--------------END RESPONSE LOG--------------");
         }
     }
     @Override
