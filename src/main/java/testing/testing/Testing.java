@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import testing.testing.handlers.ChangeDayHttpHandler;
+import testing.testing.tasks.ChangeDay;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -21,7 +22,7 @@ public final class Testing extends JavaPlugin implements Listener {
     private HttpServer server = null;
     @Override
     public void onEnable() {
-        BukkitTask changeDayTask = new ChangeDay(this).runTaskTimer(this, 0L, 100L);
+        BukkitTask changeDayTask = new ChangeDay(this, messages).runTaskTimer(this, 0L, 100L);
         try {
             server = HttpServer.create(new InetSocketAddress(12000), 0);
             server.createContext("/test", new ChangeDayHttpHandler(messages));
@@ -40,23 +41,23 @@ public final class Testing extends JavaPlugin implements Listener {
         server.stop(0);
     }
 
-    public class ChangeDay extends BukkitRunnable {
-
-        Plugin myPlugin;
-
-        public ChangeDay(Plugin myPlugin) {
-            this.myPlugin = myPlugin;
-        }
-
-        @Override
-        public void run() {
-            if (messages.size() > 0) {
-                Bukkit.getServer().getWorld("world").setTime(0L);
-                messages.poll();
-            }
-        }
-        public Plugin getMyPlugin() {
-            return myPlugin;
-        }
-    }
+//    public class ChangeDay extends BukkitRunnable {
+//
+//        Plugin myPlugin;
+//
+//        public ChangeDay(Plugin myPlugin) {
+//            this.myPlugin = myPlugin;
+//        }
+//
+//        @Override
+//        public void run() {
+//            if (messages.size() > 0) {
+//                Bukkit.getServer().getWorld("world").setTime(0L);
+//                messages.poll();
+//            }
+//        }
+//        public Plugin getMyPlugin() {
+//            return myPlugin;
+//        }
+//    }
 }
