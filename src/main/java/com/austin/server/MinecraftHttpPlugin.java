@@ -1,19 +1,19 @@
-package testing.testing;
+package com.austin.server;
 
+import com.austin.server.tasks.ChangeDay;
 import com.sun.net.httpserver.HttpServer;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import testing.testing.handlers.ChangeDayHttpHandler;
-import testing.testing.tasks.ChangeDay;
+import com.austin.server.handlers.ChangeDayHttpHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public final class Testing extends JavaPlugin implements Listener {
+public final class MinecraftHttpPlugin extends JavaPlugin implements Listener {
     PluginLogger logger = new PluginLogger(this);
     Queue<String> messages = new ConcurrentLinkedQueue<>();
     private HttpServer server = null;
